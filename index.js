@@ -6,6 +6,8 @@ const app = express();
 const httpServer = HTTPServer(app);
 const io = new SocketServer(httpServer);
 
+app.use(express.static("public"));
+
 httpServer.listen(8080, () => {
   console.log("Server open, port: ", 8080);
 });
