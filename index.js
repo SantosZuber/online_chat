@@ -5,6 +5,7 @@ const { Server: SocketServer } = require("socket.io");
 const app = express();
 const httpServer = HTTPServer(app);
 const io = new SocketServer(httpServer);
+const mensajes = [];
 
 function validateUsername(data) {
   if (data.includes("<", ">", "*", "/")) {
@@ -26,11 +27,9 @@ function validateMsg(data) {
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
-  const mensajes = [];
-  console.log("Cliente conectado: ", socket.id);
+  console.log("New connection, id: ", socket.id);
   const colors = ["purple", "green", "blue"];
   const randomNum = Math.floor(Math.random() * 3);
-  console.log(randomNum)
   const color = colors[randomNum];
   socket.on("message", (username, message) => {
     validateUsername(username);
