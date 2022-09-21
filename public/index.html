@@ -4,9 +4,29 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="./main.css" />
+    <title>Chat</title>
   </head>
   <body>
+    <div id="login">
+      <form class="column" id="form">
+        <label>Enter a username:</label>
+        <input type="text" id="username" />
+      </form>
+    </div>
+
+    <div id="welcome">
+      <h1 id="welcome-title"></h1>
+    </div>
+
+    <main id="chat-page">
+      <div id="chatbox">
+        <div id="chat"></div>
+        <form id="input-container">
+          <input type="text" id="message" maxlength="400" />
+        </form>
+      </div>
+    </main>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./app.js"></script>
   </body>
