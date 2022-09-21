@@ -1,6 +1,7 @@
 const socket = io.connect();
 let chat = document.getElementById("chat");
 let username;
+
 document.getElementById("welcome").style.display = "none";
 document.getElementById("chat-page").style.display = "none";
 
@@ -40,7 +41,6 @@ document.getElementById("input-container").onsubmit = function (e) {
     document.getElementById("message").value = "";
     message = "";
   }
-  chat.scrollBy(0, chat.scrollHeight);
 };
 
 socket.on("newmsg", (data) => {
@@ -59,6 +59,11 @@ socket.on("newmsg", (data) => {
     chat.appendChild(messageElement);
     return;
   });
+  chat.scrollBy(0, chat.scrollHeight);
+  let music = new Audio("./sound.wav");
+  music.play();
+  music.loop = false;
+  music.playbackRate = 1;
 });
 
 function validateUsername(data) {
