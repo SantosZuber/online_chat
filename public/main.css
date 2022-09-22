@@ -124,6 +124,20 @@ span {
 .msg-text {
   max-width: 370px;
 }
+
+#users-online-container {
+  max-width: 70%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: left;
+  gap: 17px;
+}
+#users-online-container .users-online p {
+  color: white;
+}
+
 @keyframes appearsize {
   0% {
     transform: scale(0%);

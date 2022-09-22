@@ -10,6 +10,7 @@ document.getElementById("form").onsubmit = function (e) {
   if (!document.getElementById("username").value == "") {
     username = document.getElementById("username").value;
     validateUsername(username);
+    socket.emit("online", username);
     document.getElementById("login").style.display = "none";
     document.getElementById("welcome").style.display = "flex";
     document.getElementById("welcome-title").innerHTML = `Hello ${username}`;
@@ -64,6 +65,36 @@ socket.on("newmsg", (data) => {
   music.play();
   music.loop = false;
   music.playbackRate = 1;
+});
+
+socket.on("ping", (data) => {
+  chat.innerHTML = "";
+  data.forEach((e) => {
+    let date = new Date();
+
+    let hrs = date.getHours();
+    let mins = date.getMinutes();
+    let amOrPm = hrs >= 12 ? "pm" : "am";
+
+    const { username, message, color } = e;
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("message");
+    messageElement.innerHTML = `<p class="${color}">${username}</p> <p class="msg-text">${message}</p><span>${hrs}:${mins}${amOrPm}</span>`;
+    chat.appendChild(messageElement);
+    return;
+  });
+  chat.scrollBy(0, chat.scrollHeight);
+});
+
+socket.on("newonline", (users) => {
+  document.getElementById("users-online-container").innerHTML = "";
+  users.forEach((e) => {
+    const userElement = document.createElement("span");
+    userElement.classList.add("users-online");
+    userElement.innerHTML = `<p>🟢 ${e}</p>`;
+    document.getElementById("users-online-container").appendChild(userElement);
+    return;
+  });
 });
 
 function validateUsername(data) {

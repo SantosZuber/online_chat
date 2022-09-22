@@ -6,6 +6,8 @@ const app = express();
 const httpServer = HTTPServer(app);
 const io = new SocketServer(httpServer);
 const mensajes = [];
+const onlineUsers = [];
+let myUsername;
 
 function validateUsername(data) {
   if (data.includes("<", ">", "*", "/")) {
@@ -31,11 +33,23 @@ io.on("connection", (socket) => {
   const colors = ["purple", "green", "blue"];
   const randomNum = Math.floor(Math.random() * 3);
   const color = colors[randomNum];
+  socket.emit("ping", mensajes);
   socket.on("message", (username, message) => {
     validateUsername(username);
     validateMsg(message);
     mensajes.push({ username: username, message: message, color: color });
     io.sockets.emit("newmsg", mensajes);
+  });
+  socket.on("online", (username) => {
+    validateUsername(username);
+    myUsername = username;
+    onlineUsers.push(username);
+    io.sockets.emit("newonline", onlineUsers);
+  });
+  socket.on("disconnect", () => {
+    console.log("Disconnected, id: ", socket.id);
+    onlineUsers.splice(onlineUsers.indexOf(myUsername), 1);
+    io.sockets.emit("newonline", onlineUsers);
   });
 });
 
