@@ -36,8 +36,15 @@ document.getElementById("form").onsubmit = function (e) {
 document.getElementById("input-container").onsubmit = function (e) {
   e.preventDefault();
   if (!document.getElementById("message").value == "") {
-    let message = document.getElementById("message").value;
-    validateMsg(message);
+    let date = new Date();
+    let hrs = date.getHours();
+    let mins = date.getMinutes();
+    let amOrPm = hrs >= 12 ? "pm" : "am";
+
+    let message = {};
+    validateMsg(document.getElementById("message").value);
+    message.text = document.getElementById("message").value;
+    message.date = `${hrs}:${mins}${amOrPm}`;
     socket.emit("message", username, message);
     document.getElementById("message").value = "";
     message = "";
@@ -47,16 +54,10 @@ document.getElementById("input-container").onsubmit = function (e) {
 socket.on("newmsg", (data) => {
   chat.innerHTML = "";
   data.forEach((e) => {
-    let date = new Date();
-
-    let hrs = date.getHours();
-    let mins = date.getMinutes();
-    let amOrPm = hrs >= 12 ? "pm" : "am";
-
-    const { username, message, color } = e;
+    const { username, message, date, color } = e;
     const messageElement = document.createElement("div");
     messageElement.classList.add("message");
-    messageElement.innerHTML = `<p class="${color}">${username}</p> <p class="msg-text">${message}</p><span>${hrs}:${mins}${amOrPm}</span>`;
+    messageElement.innerHTML = `<p class="${color}">${username}</p> <p class="msg-text">${message}</p><span>${date}</span>`;
     chat.appendChild(messageElement);
     return;
   });
@@ -70,16 +71,10 @@ socket.on("newmsg", (data) => {
 socket.on("ping", (data) => {
   chat.innerHTML = "";
   data.forEach((e) => {
-    let date = new Date();
-
-    let hrs = date.getHours();
-    let mins = date.getMinutes();
-    let amOrPm = hrs >= 12 ? "pm" : "am";
-
-    const { username, message, color } = e;
+    const { username, message, date, color } = e;
     const messageElement = document.createElement("div");
     messageElement.classList.add("message");
-    messageElement.innerHTML = `<p class="${color}">${username}</p> <p class="msg-text">${message}</p><span>${hrs}:${mins}${amOrPm}</span>`;
+    messageElement.innerHTML = `<p class="${color}">${username}</p> <p class="msg-text">${message}</p><span>${date}</span>`;
     chat.appendChild(messageElement);
     return;
   });

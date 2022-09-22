@@ -36,8 +36,13 @@ io.on("connection", (socket) => {
   socket.emit("ping", mensajes);
   socket.on("message", (username, message) => {
     validateUsername(username);
-    validateMsg(message);
-    mensajes.push({ username: username, message: message, color: color });
+    validateMsg(message.text);
+    mensajes.push({
+      username: username,
+      message: message.text,
+      date: message.date,
+      color: color,
+    });
     io.sockets.emit("newmsg", mensajes);
   });
   socket.on("online", (username) => {
